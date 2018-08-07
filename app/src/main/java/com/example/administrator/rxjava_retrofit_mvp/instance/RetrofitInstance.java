@@ -3,6 +3,7 @@ package com.example.administrator.rxjava_retrofit_mvp.instance;
 import com.example.administrator.rxjava_retrofit_mvp.constants.API;
 
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -23,6 +24,7 @@ public class RetrofitInstance {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API.URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
         return retrofit;
     }

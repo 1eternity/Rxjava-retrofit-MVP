@@ -15,6 +15,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import rx.Observable;
+import rx.Subscriber;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,20 +31,23 @@ public class MainActivity extends AppCompatActivity {
         retrofit = instance.getRetrofit();
         loadingData();
     }
-
     private void loadingData() {
         UserMessageInter userMessageInter = retrofit.create(UserMessageInter.class);
-        Call<UserBean> call = userMessageInter.getMessage("ligoudan");
-        call.enqueue(new Callback<UserBean>() {
+        Observable<UserBean> ob = userMessageInter.getMessage("ligoudan");
+        ob.subscribeOn(Schedulers.io()).subscribe(new Subscriber<UserBean>() {
             @Override
-            public void onResponse(Call<UserBean> call, Response<UserBean> response) {
-                UserBean body = response.body();
-                Log.e("tag", "name=" + body.toString());
+            public void onCompleted() {
+                Log.e("tag", "onCompleted");
             }
 
             @Override
-            public void onFailure(Call<UserBean> call, Throwable t) {
+            public void onError(Throwable e) {
+                Log.e("tag", "onError");
+            }
 
+            @Override
+            public void onNext(UserBean userBean) {
+                Log.e("tag", "user" + userBean.toString());
             }
         });
     }
