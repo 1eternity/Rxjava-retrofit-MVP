@@ -60,8 +60,10 @@ public class MainActivity extends BaseActivity implements IView, View.OnClickLis
     protected int getLayoutId() {
         return R.layout.activity_main;
     }
+
     @Override
     public void showLoadingDialog() {
+        progressDialog.setMessage("正在加载中。。。");
         progressDialog.show();
     }
 
@@ -82,5 +84,13 @@ public class MainActivity extends BaseActivity implements IView, View.OnClickLis
                 userInfoPresenter.initData("Guolei1130");
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e("tag","onDestroy"+userInfoPresenter);
+        userInfoPresenter.detachView();
+        userInfoPresenter.detachRxjava();
     }
 }
